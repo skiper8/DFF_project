@@ -12,6 +12,7 @@ class Command(BaseCommand):
         Course.objects.all().delete()
         Payment.objects.all().delete()
 
+        User.objects.create(email='user@test.com', is_active=True)
         Course.objects.create(title="Django", price=5000)
         Course.objects.create(title="Основы Python", price=1000)
         User.objects.create(email='test@test.com', is_active=True)

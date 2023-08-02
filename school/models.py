@@ -1,4 +1,6 @@
 from django.db import models
+
+from config import settings
 from users.models import User
 
 NULLABLE: dict[str, bool] = {'blank': True, 'null': True}
@@ -9,6 +11,7 @@ class Course(models.Model):
     image = models.ImageField(upload_to='course_image/', verbose_name='изображение', **NULLABLE)
     description = models.TextField(verbose_name='описание', **NULLABLE)
     price = models.IntegerField(default=0, verbose_name='стоимость курса')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
         return f'{self.title}'
@@ -25,6 +28,7 @@ class Lessons(models.Model):
     description = models.TextField(verbose_name='описание', **NULLABLE)
     link = models.CharField(max_length=500, verbose_name='Ссылка', **NULLABLE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс', **NULLABLE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
         return f'{self.title}'
