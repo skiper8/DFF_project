@@ -105,3 +105,43 @@ class LessonsTestCase(APITestCase):
         self.assertEqual(response.json(),
                          {'id': 2, 'title': 'lessons_test', 'image': None, 'description': 'test test',
                           'link': 'youtube.com', 'course': 5, 'owner': 5})
+
+
+class SubscribeTestCase(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create(
+            email='test@yandex.ru',
+            first_name='Test',
+            last_name='Test',
+            is_staff=False,
+            is_superuser=False
+        )
+
+        self.user.set_password('0000')
+        self.user.save()
+        self.client.force_authenticate(user=self.user)
+        self.url_course = '/course/'
+        self.url_subscribe = '/subscribe-create/'
+
+    def test_subscribe_lessons(self):
+        """Тест на создание subscribe"""
+
+        data_course = {
+            'title': 'course_test',
+            'description': 'test test'
+        }
+        data_subscribe = {
+            'course': 6,
+            'subscribe_status': True
+        }
+        response_course = self.client.post(self.url_course, data=data_course)
+
+        response_subscribe = self.client.post(f'{self.url_subscribe}',
+                                              data=data_subscribe)
+        print(response_subscribe.json())
+        print(response_course.json())
+        self.assertEqual(response_subscribe.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response_course.json(),
+                         {'id': 6, 'lesson_count': 0, 'lessons': [], 'subscribe': [], 'title': 'course_test',
+                          'image': None, 'description': 'test test', 'price': 0, 'owner': 6})
