@@ -142,6 +142,5 @@ class SubscribeTestCase(APITestCase):
         print(response_subscribe.json())
         print(response_course.json())
         self.assertEqual(response_subscribe.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response_course.json(),
-                         {'id': 6, 'lesson_count': 0, 'lessons': [], 'subscribe': [], 'title': 'course_test',
-                          'image': None, 'description': 'test test', 'price': 0, 'owner': 6})
+        self.assertEqual(response_subscribe.json(),
+                         {'course': 6, 'id': 1, 'owner': 6, 'subscribe_status': True})
