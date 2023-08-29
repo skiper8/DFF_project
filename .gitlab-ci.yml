@@ -1,4 +1,4 @@
-tages:
+stages:
     - deploy
 
 Deploy to stage:
@@ -9,7 +9,6 @@ Deploy to stage:
     only:
         - main
     tags:
-        - dev
         - dev
 
 # curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | sudo bash
