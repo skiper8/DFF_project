@@ -6,5 +6,5 @@ Deploy to stage:
     tags:
         - dev
     script:
-        - cp $ENV_STAGE .env
+        - cp $ENV_STAGE .env.docker
         - bash deploy.sh
