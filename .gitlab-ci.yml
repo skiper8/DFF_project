@@ -1,10 +1,11 @@
 stages:
-    - deploy
+  - deploy
 
 Deploy to stage:
-    stage: deploy
-    tags:
-        - dev
-    script:
-        - cp $ENV_STAGE .env.docker
-        - bash deploy.sh
+  stage: deploy
+  script:
+    - cp $ENV_STAGE .env
+    - bash deploy.sh
+    - docker-compose up -d --build
+  tags:
+    - dev
