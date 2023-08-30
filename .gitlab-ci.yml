@@ -1,6 +1,8 @@
 stages:
   - deploy
 
+image: python:3.9
+
 Deploy to stage:
   stage: deploy
   script:
