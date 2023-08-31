@@ -8,6 +8,5 @@ Deploy to stage:
   script:
     - cp $ENV_STAGE .env
     - bash deploy.sh
-    - python3 manage.py runserver 0.0.0.0:8000
   tags:
     - dev
