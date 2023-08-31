@@ -8,6 +8,5 @@ Deploy to stage:
   script:
     - cp $ENV_STAGE .env
     - bash deploy.sh
-    - docker-compose up -d --build
   tags:
     - dev
