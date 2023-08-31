@@ -8,5 +8,7 @@ Deploy to stage:
   script:
     - cp $ENV_STAGE .env
     - bash deploy.sh
+  only:
+    - main
   tags:
     - dev
