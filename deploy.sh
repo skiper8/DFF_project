@@ -5,3 +5,4 @@ python3 manage.py migrate
 coverage run --source='.' manage.py test
 coverage report
 deactivate
+python3 manage.py runserver 0.0.0.0:8000
