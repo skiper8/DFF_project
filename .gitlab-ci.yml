@@ -7,12 +7,6 @@ Deploy to stage:
   stage: deploy
   script:
     - cp $ENV_STAGE .env
-    - python3 -m venv venv
-    - source venv/bin/activate
-    - pip3 install -r requirements.txt
-    - python3 manage.py migrate
-    - coverage run --source='.' manage.py test
-    - coverage report
-    - deactivate
+    - bash deploy.sh
   tags:
     - dev
