@@ -1,74 +1,20 @@
-version: '3.3'
+version: '3.9'
 
 services:
-  db:
-    restart: always
-    container_name: db
-    env_file:
-      - ./.env
-    image: postgres:14.9-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./.env.docker
-    healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready' ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  redis:
-    image: redis:alpine
-    container_name: redis_app
-    command: redis-server --save 20 1 --loglevel warning
-    volumes:
-      - ./data/cache:/data
-
-  api:
-    restart: always
+  app:
     build:
       context: .
-    container_name: api
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
     env_file:
-      - ./.env
+      - .env.docker
     ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
-      - ./.env.docker/:/app/.env
+      - '8000:8000'
     command: >
-      bash -c "python  manage.py collectstatic --noinput
-      && python manage.py makemigrations
-      && python manage.py migrate
-      && python manage.py runserver 0.0.0.0:8000"
-
-  celery:
-    container_name: celery
-    build: .
-    command: >
-      bash -c "celery -A config.celery worker --loglevel=info"
-    volumes:
-      - .:/app
-    links:
-      - redis
+      bash -c "python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
-      - api
-
-  celery-beat:
-    container_name: celery-beat
-    build: .
-    command: >
-      bash -c "sleep 30 && celery -A config.celery beat --loglevel=info"
-    volumes:
-      - .:/app
-    depends_on:
-      - api
-      - celery
-
-volumes:
-  postgres_data:
+  db:
+    image: postgres:14.7-alpine
+    env_file:
+      - .env.docker
+    ports:
+      - '5432:5432'
