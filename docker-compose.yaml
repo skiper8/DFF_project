@@ -21,31 +21,18 @@ services:
       - .env.docker
     ports:
       - '5432:5432'
-    healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready' ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+#    healthcheck:
+#      test: [ 'CMD-SHELL', 'pg_isready' ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/pgdata
 
   redis:
     image: redis:alpine
     container_name: redis_app
     command: redis-server --save 20 1 --loglevel warning
-
-  api:
-    restart: always
-    build:
-      context: .
-    container_name: api
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
-    env_file:
-      - ./.env
-    ports:
-      - "8000:8000"
 
   celery:
     container_name: celery
@@ -55,7 +42,9 @@ services:
     links:
       - redis
     depends_on:
-      - api
+      - db
+      - app
+      - redis
 
   celery-beat:
     container_name: celery-beat
@@ -64,3 +53,6 @@ services:
       bash -c "sleep 30 && celery -A config.celery beat --loglevel=info"
     depends_on:
       - celery
+
+volumes:
+  postgres_data:
